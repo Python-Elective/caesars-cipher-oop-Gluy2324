@@ -54,7 +54,7 @@ def get_story_string():
     return story
 
 WORDLIST_FILENAME = 'words.txt'
-
+ 
 class Message(object):
     ### DO NOT MODIFY THIS METHOD ###
     def __init__(self, text):
@@ -102,7 +102,21 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        dict = {}
+        lower = string.ascii_lowercase
+        upper = string.ascii_uppercase
+        len_l = len(lower)
+        len_u = len(upper)
+        for i in range(len_l):
+            dict[lower[i]] = lower[(i + shift) % len_l]
+        for i in range(len_u):
+            dict[upper[i]] = upper[(i + shift) % len_u]
+        #print(dict)
+        dict[' '] = ' '  #ensures that the whitespace character remains unchanged
+        for letter in string.punctuation:
+            dict[letter] = letter
+        return dict
+        
 
     def apply_shift(self, shift):
         '''
@@ -116,7 +130,21 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        s = ''
+        for letter in self.message_text:
+            if letter.islower():
+                s += self.build_shift_dict(shift)[letter]
+            else:
+                s += self.build_shift_dict(shift)[letter.lower()].upper()
+        return s
+
+m = Message("haPPy !!!!")
+d = m.build_shift_dict(3)
+print(d)
+
+shifted_text = m.apply_shift(3)
+print(shifted_text)
+
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -207,18 +235,18 @@ class CiphertextMessage(Message):
         pass #delete this line and replace with your code here
 
 
-if __name__ == '__main__':
-    s = get_story_string()
-    ciphertext = CiphertextMessage(s)
-    print(ciphertext.decrypt_message())
+#if __name__ == '__main__':
+    #s = get_story_string()
+    #ciphertext = CiphertextMessage(s)
+    #print(ciphertext.decrypt_message())
     
     
 # Example test case (PlaintextMessage)
-plaintext = PlaintextMessage('hello', 2)
-print('Expected Output: jgnnq')
-print('Actual Output:', plaintext.get_message_text_encrypted())
+#plaintext = PlaintextMessage('hello', 2)
+#print('Expected Output: jgnnq')
+#print('Actual Output:', plaintext.get_message_text_encrypted())
     
 # Example test case (CiphertextMessage)
-ciphertext = CiphertextMessage('jgnnq, yqtnf!')
-print('Expected Output:', (24, 'hello, world!'))
-print('Actual Output:', ciphertext.decrypt_message())
+#ciphertext = CiphertextMessage('jgnnq, yqtnf!')
+#print('Expected Output:', (24, 'hello, world!'))
+#print('Actual Output:', ciphertext.decrypt_message())
