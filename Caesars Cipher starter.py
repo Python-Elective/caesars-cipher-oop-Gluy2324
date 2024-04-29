@@ -40,7 +40,7 @@ def is_word(word_list, word):
     False
     '''
     word = word.lower()
-    word = word.strip(" !@#$%^&*()-_+={}[]|\:;'<>?,./\"")
+    word = word.strip(" !@#$%^&*()-_+={}[]|\\:;'<>?,./\"")
     return word in word_list
 
 ### DO NOT MODIFY THIS FUNCTION ###
@@ -112,9 +112,7 @@ class Message(object):
         for i in range(len_u):
             dict[upper[i]] = upper[(i + shift) % len_u]
         #print(dict)
-        dict[' '] = ' '  #ensures that the whitespace character remains unchanged
-        for letter in string.punctuation:
-            dict[letter] = letter
+        # dict[' '] = ' '  #ensures that the whitespace character remains unchanged
         return dict
         
 
@@ -131,8 +129,13 @@ class Message(object):
              down the alphabet by the input shift
         '''
         s = ''
+ 
+        ignored_chars = string.punctuation + string.whitespace + string.digits
+        ignored_dict = {}
         for letter in self.message_text:
-            if letter.islower():
+            if letter in ignored_chars:
+                s += letter
+            elif letter.islower():
                 s += self.build_shift_dict(shift)[letter]
             else:
                 s += self.build_shift_dict(shift)[letter.lower()].upper()
